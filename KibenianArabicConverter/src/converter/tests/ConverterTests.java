@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class ConverterTests {
 
 
-    @Test
+    @Test // Tests that all numeric equal their respective letter values
     public void ArabicToKibenianSampleTest() throws MalformedNumberException, ValueOutOfBoundsException {
         KibenianArabicConverter converter = new KibenianArabicConverter("1");
         assertEquals(converter.toKibenian(), "I");
@@ -25,7 +25,7 @@ public class ConverterTests {
         assertEquals(converter.toKibenian(), "L");
     }
 
-    @Test
+    @Test // Tests that all letter equal their respective numeric values
     public void KibenianToArabicSampleTest() throws MalformedNumberException, ValueOutOfBoundsException {
         KibenianArabicConverter converter = new KibenianArabicConverter("I");
         assertEquals(converter.toArabic(), 1);
@@ -38,23 +38,23 @@ public class ConverterTests {
     }
 
 
-//    @Test(expected = MalformedNumberException.class)
+//    @Test(expected = MalformedNumberException.class) // tests if a number can be converted from K to A
 //    public void malformedNumberTest() throws MalformedNumberException, ValueOutOfBoundsException {
 //        throw new MalformedNumberException("TEST");
 //    }
 
-    @Test(expected = ValueOutOfBoundsException.class)
+    @Test(expected = ValueOutOfBoundsException.class) // tests iif a number can be converted from A to K
     public void valueOutOfBoundsTest() throws MalformedNumberException, ValueOutOfBoundsException {
         throw new ValueOutOfBoundsException("0");
     }
 
-    @Test
+    @Test // testing numbers under 60 return in K correctly
     public void ArabicToKibenianUnder60() throws MalformedNumberException, ValueOutOfBoundsException {
         KibenianArabicConverter converter = new KibenianArabicConverter("42");
         assertEquals(converter.toArabic(), "XXXXII");
     }
 
-    @Test
+    @Test // testinf nunmbers under 60 return in K correctly
     public void ArabicToKibenianOver60() throws MalformedNumberException, ValueOutOfBoundsException {
         KibenianArabicConverter converter = new KibenianArabicConverter("76");
         assertEquals(converter.toArabic(), "I_XVI");
