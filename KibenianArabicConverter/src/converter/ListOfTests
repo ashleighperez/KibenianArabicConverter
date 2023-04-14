@@ -3,14 +3,14 @@ List of tests needed:
 DONE:
 Test of all possible single characters and corresponding digits
 Test of all digits corresponding to all possible characters in Kibetnen
-
-TODO:
 An arabic integer that is less than 60
 An arabic integer that is more than 60 (involving underscores)
 An arabic integer involving two underscores (divisible by 3600)
-An arabic integer that is outside of range 1 and 215999 (throws ValueOutOfBounds exception)
-An arabic integer that is a decimal or has leading zeros (throws MalformedNumber exception)
-An Kibenian numeral that has a lowercase letter (MalformedNumber exception)
+
+TODO:
+
+
+
 Incorrect input (MalformedNumber exception)
 A Kibenian numeral that has three underscores(MalformedNumber exception)
 More than 1 L, more than 4 X’s in a row, More than 1 V, More than 4 I’s in a row,
