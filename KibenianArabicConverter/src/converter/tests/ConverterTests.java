@@ -6,6 +6,7 @@ import converter.exceptions.ValueOutOfBoundsException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 /**
  * Test cases for the KibenianArabicConverter class.
@@ -76,6 +77,54 @@ public class ConverterTests {
     public void ArabicToKibenianOver60() throws MalformedNumberException, ValueOutOfBoundsException {
         KibenianArabicConverter converter = new KibenianArabicConverter("76");
         assertEquals("I_XVI", converter.toKibenian());
+    }
+
+    @Test // testing nums over 3600
+    public void ArabicToKibenianOver3600() throws MalformedNumberException, ValueOutOfBoundsException {
+        KibenianArabicConverter converter = new KibenianArabicConverter("7276");
+        assertEquals("II_I_XVI", converter.toKibenian());
+        converter = new KibenianArabicConverter("3670");
+        assertEquals("I_I_X", converter.toKibenian());
+    }
+
+    @Test (expected = MalformedNumberException.class)
+    public void KibenianToArabicTestSpaces() throws MalformedNumberException, ValueOutOfBoundsException {
+        KibenianArabicConverter converter = new KibenianArabicConverter(" II_I_XVI");
+        assertThrows("Integer cannot be represented in the Arabic number system", MalformedNumberException.class, () -> converter.toArabic());
+        KibenianArabicConverter converter1 = new KibenianArabicConverter("II_I_XVI ");
+        assertThrows("Integer cannot be represented in the Arabic number system", MalformedNumberException.class, () -> converter1.toArabic());
+        KibenianArabicConverter converter2 = new KibenianArabicConverter("II_I_ XVI");
+        assertThrows("Integer cannot be represented in the Arabic number system", MalformedNumberException.class, () -> converter2.toArabic());
+
+    }
+
+    @Test (expected = MalformedNumberException.class)
+    public void ArabictoKibenianTestSpaces() throws MalformedNumberException, ValueOutOfBoundsException {
+        KibenianArabicConverter converter = new KibenianArabicConverter("3670 ");
+        assertThrows("Integer cannot be represented in the Arabic number system", MalformedNumberException.class, () -> converter.toArabic());
+        KibenianArabicConverter converter2 = new KibenianArabicConverter(" 3670");
+        assertThrows("Integer cannot be represented in the Arabic number system", MalformedNumberException.class, () -> converter2.toArabic());
+        KibenianArabicConverter converter3 = new KibenianArabicConverter("36 70");
+        assertThrows("Integer cannot be represented in the Arabic number system", MalformedNumberException.class, () -> converter3.toArabic());
+
+    }
+
+    @Test (expected = MalformedNumberException.class)
+    public void KibenianToArabicSubGroupExceeding60Test() throws MalformedNumberException, ValueOutOfBoundsException {
+        KibenianArabicConverter converter = new KibenianArabicConverter("LLL_X_I ");
+        assertThrows("Integer cannot be represented in the Arabic number system", MalformedNumberException.class, () -> converter.toArabic());
+        KibenianArabicConverter converter2 = new KibenianArabicConverter("L_XXXXX_XI ");
+        assertThrows("Integer cannot be represented in the Arabic number system", MalformedNumberException.class, () -> converter2.toArabic());
+
+    }
+
+    @Test (expected = MalformedNumberException.class)
+    public void KibenianToArabicCorrectCharacterOrderTest() throws MalformedNumberException, ValueOutOfBoundsException {
+        KibenianArabicConverter converter = new KibenianArabicConverter("XL_X_I ");
+        assertThrows("Integer cannot be represented in the Arabic number system", MalformedNumberException.class, () -> converter.toArabic());
+        KibenianArabicConverter converter2 = new KibenianArabicConverter("I_IX ");
+        assertThrows("Integer cannot be represented in the Arabic number system", MalformedNumberException.class, () -> converter2.toArabic());
+
     }
 
     // TODO Add more test cases

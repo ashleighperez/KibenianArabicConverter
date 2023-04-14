@@ -157,4 +157,32 @@ public class KibenianArabicConverter {
         return new StringBuilder(kNum).reverse().toString();
     }
 
+    public String subgroupConversion(int subgroup){
+        String subGroupKibenian= "";
+        int numOf50 = subgroup/50;
+        int remainder = subgroup%50;
+        int numOf10 = remainder/10;
+        remainder = remainder%10;
+        int numOf5 = remainder/5;
+        int numOf1 = remainder%5;
+
+        while(numOf1>0){
+            subGroupKibenian+="I";
+            numOf1--;
+        }
+        while(numOf5>0){
+            subGroupKibenian+="V";
+            numOf5--;
+        }
+        while(numOf10>0){
+            subGroupKibenian+="X";
+            numOf10--;
+        }
+        while(numOf50>0){
+            subGroupKibenian+="L";
+            numOf50--;
+        }
+        return subGroupKibenian;
+    }
+
 }
