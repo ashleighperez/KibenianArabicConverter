@@ -33,29 +33,29 @@ public class KibenianArabicConverter {
     public KibenianArabicConverter(String number) throws MalformedNumberException, ValueOutOfBoundsException {
         this.number = number;
 
-        String arrRegex = "\\d+"; // matches if number is comprised of intergers
-        String kibRegex = "\\D+"; // matches if number is comprised of letters
         String decRegex = "/^\\d*\\.?\\d*$/"; // matches if number is a decimal
-        String capRegex = "[A-Z\\s]"; // matches is ALL characters are uppercase
+        String capRegex = "[A-Z_]+"; // matches is ALL characters are uppercase
+        int intVal = 0;
 
-        if (number.matches(arrRegex)) { // if number is an integer/arabic number
-            int intVal = Integer.parseInt(number);
-            if (intVal < 1 || intVal > 215999) {
-                throw new ValueOutOfBoundsException("Integer is out of Kibenian number system range");
-            } else if (number.matches(decRegex) || number.startsWith("0")) {
-                throw new MalformedNumberException("Integer cannot be represented in the Kibenian number system");
-            } else {
-                this.aNum = Integer.parseInt(number);
-            }
+        try {
 
-        } else if (number.matches(kibRegex)) { // if number is a string of letters
-            if (!number.matches(capRegex)) { // if not all uppercase
-                throw new MalformedNumberException("Integer cannot be represented in the Arabic number system");
-            } else {
-                this.kNum = number;
-            }
-        } else {
-            throw new MalformedNumberException("Not string or integer");
+            intVal = Integer.parseInt(number);
+
+                if (intVal < 1 || intVal > 215999) {
+                    throw new ValueOutOfBoundsException("Integer is out of Kibenian number system range");
+                } else if (number.matches(decRegex) || number.startsWith("0")) {
+                    throw new MalformedNumberException("Integer cannot be represented in the Kibenian number system");
+                } else {
+                    this.aNum = Integer.parseInt(number);
+                }
+
+        } catch (NumberFormatException e) {
+
+                if (!number.matches(capRegex)) { // if not all uppercase
+                    throw new MalformedNumberException("Integer cannot be represented in the Arabic number system");
+                } else {
+                    this.kNum = number;
+                }
         }
     }
 
@@ -77,14 +77,18 @@ public class KibenianArabicConverter {
 
         int underscoreCount = 0;
 
-        for (Character c: kNum.toCharArray()) {
-            if (c.equals('_')) { underscoreCount++; break;}
+        for (int i = kNum.length() - 1; i >= 0; i--) {
+            char c = kNum.charAt(i);
 
-            switch(underscoreCount) {
-                case 0: p1 += toArabicChar(c); subgroup1 += c; break;
-                case 1: p60 += toArabicChar(c); subgroup60 += c; break;
-                case 2: p3600 += toArabicChar(c); subgroup3600 += c; break;
-                default: throw new MalformedNumberException("Number must have less than 3 underscores");
+            if (c == ('_')) {
+                underscoreCount++;
+            } else {
+                switch(underscoreCount) {
+                    case 0: p1 += toArabicChar(c); subgroup1 += c; break;
+                    case 1: p60 += toArabicChar(c); subgroup60 += c; break;
+                    case 2: p3600 += toArabicChar(c); subgroup3600 += c; break;
+                    default: throw new MalformedNumberException("Number must have less than 3 underscores");
+                }
             }
         }
 
@@ -145,12 +149,14 @@ public class KibenianArabicConverter {
         int p1 = remainder%60; // p1 subgroup
 
         kNum += subgroupConversion(p1);
-        if (p60 > 0) {
+
+        if (p60 >= 0) {
             kNum += "_";
             kNum+= subgroupConversion(p60);
         }
-        if (p3600 > 0) {
+        if (p3600 >= 0) {
             kNum += "_";
+            //if (aNum == 3600) { kNum += "_"; }
             kNum+= subgroupConversion(p3600);
         }
 
